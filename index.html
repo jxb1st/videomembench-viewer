@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VideoMemBench Dataset Viewer</title>
+<style>
+:root {
+  --bg: #0f1419;
+  --panel: #1a2129;
+  --border: #2d3640;
+  --text: #e6e9ed;
+  --muted: #8a949e;
+  --accent: #4dabf7;
+  --good: #51cf66;
+  --bad: #ff6b6b;
+  --highlight: #ffd43b;
+  --assistant: #51cf66;
+  --user: #4dabf7;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+header {
+  padding: 12px 20px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+header h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.control { display: flex; align-items: center; gap: 6px; }
+.control label { color: var(--muted); font-size: 12px; }
+select, input, button {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  border-radius: 4px;
+}
+button { cursor: pointer; }
+button:hover:not(:disabled) { background: var(--border); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+input[type=number] { width: 80px; }
+.banner {
+  background: rgba(77, 171, 247, 0.08);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.banner strong { color: var(--text); }
+.banner a { color: var(--accent); text-decoration: none; }
+.banner a:hover { text-decoration: underline; }
+.back-link { font-weight: 500; }
+.video-missing {
+  padding: 40px;
+  text-align: center;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 16px;
+  padding: 16px;
+  max-width: 100%;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  overflow: hidden;
+}
+.panel h2 {
+  margin: 0 0 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.field { margin-bottom: 12px; }
+.field-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.field-value { font-size: 14px; word-break: break-word; }
+.field-value.code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  background: var(--bg);
+  padding: 6px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+}
+video {
+  width: 100%;
+  max-height: 540px;
+  background: #000;
+  border-radius: 4px;
+}
+.video-placeholder {
+  width: 100%;
+  min-height: 240px;
+  background: #000;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--bad);
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+  gap: 8px;
+}
+.task-content {
+  grid-column: 1 / -1;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+}
+.task-content h2 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+.task-content h2:not(:first-of-type) { margin-top: 24px; }
+
+.chat-bubble {
+  padding: 12px 16px;
+  margin: 10px 0;
+  border-radius: 14px;
+  max-width: 85%;
+  font-size: 14px;
+}
+.chat-bubble.user {
+  background: rgba(77, 171, 247, 0.12);
+  border: 1px solid rgba(77, 171, 247, 0.4);
+  margin-left: 0;
+  margin-right: auto;
+}
+.chat-bubble.assistant {
+  background: rgba(81, 207, 102, 0.10);
+  border: 1px solid rgba(81, 207, 102, 0.35);
+  margin-left: auto;
+  margin-right: 0;
+}
+.chat-bubble.subtitle {
+  background: rgba(138, 148, 158, 0.08);
+  border: 1px dashed rgba(138, 148, 158, 0.35);
+  max-width: 85%;
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+}
+.chat-meta {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.chat-meta .jump {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+.chat-meta .jump:hover { text-decoration: underline; }
+.chat-meta .tag {
+  background: rgba(255, 212, 59, 0.15);
+  color: var(--highlight);
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+}
+
+.timeline-wrap { margin: 16px 0 8px; }
+.timeline {
+  position: relative;
+  height: 30px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  overflow: hidden;
+}
+.timeline-band {
+  position: absolute;
+  top: 0; bottom: 0;
+}
+.timeline-band.reply {
+  background: linear-gradient(90deg, rgba(81, 207, 102, 0.55), rgba(81, 207, 102, 0.25));
+  border-left: 2px solid var(--good);
+  border-right: 1px solid rgba(81, 207, 102, 0.6);
+}
+.timeline-band.related {
+  background: rgba(255, 212, 59, 0.22);
+  border-left: 1px dashed var(--highlight);
+  border-right: 1px dashed var(--highlight);
+}
+.timeline-cursor {
+  position: absolute;
+  top: -4px; bottom: -4px;
+  width: 2px;
+  background: var(--bad);
+  pointer-events: none;
+}
+.timeline-label {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.timeline-legend {
+  display: flex; gap: 16px; font-size: 11px; color: var(--muted);
+  margin-top: 6px;
+}
+.timeline-legend .swatch {
+  display: inline-block; width: 14px; height: 10px;
+  vertical-align: middle; margin-right: 4px; border-radius: 2px;
+}
+
+.stats-panel {
+  grid-column: 1 / -1;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 20px;
+}
+.stats-panel h2 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.stats-panel h2:not(:first-of-type) { margin-top: 22px; }
+.stats-summary {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+.stats-summary b {
+  color: var(--text);
+  font-weight: 600;
+  margin-left: 3px;
+}
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.overview-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+.overview-card.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.overview-card .name {
+  font-size: 12px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.overview-card .desc { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.overview-card .kv { display: flex; justify-content: space-between; font-size: 12px; margin-top: 3px; font-family: "SFMono-Regular", Consolas, monospace; }
+.overview-card .kv .k { color: var(--muted); }
+.overview-card .kv .v { color: var(--text); font-weight: 600; }
+
+.histogram { display: flex; flex-direction: column; gap: 3px; }
+.hist-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 130px;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+.hist-label { color: var(--muted); text-align: right; }
+.hist-bar-wrap { height: 18px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.hist-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #74c0fc);
+  min-width: 0;
+  transition: width 0.25s ease;
+}
+.hist-count { color: var(--text); }
+.hist-count .hist-pct { color: var(--muted); font-size: 11px; margin-left: 4px; }
+.hist-row.current .hist-label { color: var(--highlight); }
+.hist-row.current .hist-bar { background: linear-gradient(90deg, var(--highlight), #ffe066); }
+
+.task-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+}
+.note { margin: 8px 0; font-size: 12px; color: var(--muted); font-style: italic; }
+.error-msg {
+  background: rgba(255, 107, 107, 0.12);
+  border: 1px solid var(--bad);
+  color: var(--bad);
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-family: monospace;
+  font-size: 11px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+}
+.type-chip {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 6px;
+  background: rgba(77, 171, 247, 0.18);
+  color: var(--accent);
+  border-radius: 3px;
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+.related-span { font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; color: var(--muted); }
+
+.turn { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin: 10px 0; background: var(--bg); }
+.turn.dep-episodic { border-left: 4px solid var(--highlight); }
+.turn.dep-answer { border-left: 4px solid var(--purple, #b197fc); }
+.turn.dep-both { border-left: 4px solid var(--good); }
+.turn .q { font-size: 14px; margin: 6px 0; }
+.turn .a { font-size: 13px; color: var(--good); margin-top: 8px; }
+.turn .a.hidden { color: var(--muted); font-style: italic; }
+.dep-badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 3px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; cursor: pointer; }
+.dep-badge.episodic { background: rgba(255,212,59,0.15); color: var(--highlight); }
+.dep-badge.answer { background: rgba(177,151,252,0.18); color: #b197fc; }
+.turn.flash { box-shadow: 0 0 0 2px var(--accent); }
+.mcq { margin: 8px 0 0; padding: 0; list-style: none; }
+.mcq li { padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; margin: 4px 0; font-size: 13px; }
+.mcq li.correct { border-color: var(--good); color: var(--good); }
+.toggle { font-size: 12px; color: var(--accent); cursor: pointer; margin-left: 12px; }
+.lead { display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; margin-bottom: 10px; }
+.lead span { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; }
+</style>
+</head>
+<body>
+<div class="banner" id="banner">
+  <a href="https://jxb1st.github.io/datasets/" class="back-link">&larr; Dataset panel</a>
+  <span>Showing a <strong id="n-subset">-</strong>-video representative subset with their full dialogues. Full benchmark: 326 videos, 2,476 turns — see
+    <a href="https://arxiv.org/abs/2610.40131" target="_blank">arXiv 2610.40131</a> ·
+    <a href="https://videomembench.github.io/" target="_blank">project</a> ·
+    <a href="https://github.com/Oliiveralien/VideoMemBench" target="_blank">code</a> ·
+    <a href="https://huggingface.co/datasets/VideoMemBench/data" target="_blank">data</a>.
+  </span>
+</div>
+<header>
+  <h1>VideoMemBench Viewer</h1>
+  <div class="control">
+    <label>Video</label>
+    <select id="subset-select"></select>
+  </div>
+  <div class="control">
+    <button id="prev-btn">&larr; Prev</button>
+    <button id="next-btn">Next &rarr;</button>
+  </div>
+  <div class="control">
+    <button id="random-btn">Random</button>
+  </div>
+  <div class="control">
+    <label><input type="checkbox" id="show-answers" checked> show gold answers</label>
+  </div>
+  <div style="margin-left:auto;color:var(--muted);font-size:11px;">
+    <span class="kbd">&larr;</span> <span class="kbd">&rarr;</span> nav &middot;
+    <span class="kbd">R</span> random
+  </div>
+</header>
+
+<main>
+  <section class="stats-panel" id="overview-panel"></section>
+  <aside class="panel" id="metadata-panel">
+    <h2>Sample Metadata</h2>
+    <div id="metadata-fields"></div>
+  </aside>
+  <section class="panel" id="video-panel">
+    <h2>Video</h2>
+    <div id="video-container"></div>
+    <p class="note">The evaluation protocol shows the model 128 uniformly sampled, timestamped frames of the whole video at the first turn; the frames stay in the context for every later turn. No audio or subtitles are used.</p>
+  </section>
+  <section class="task-content" id="task-content"></section>
+  <section class="stats-panel" id="stats-panel"></section>
+</main>
+
+<script>
+(function() {
+  "use strict";
+  const state = { idx: 0 };
+  let SAMPLES = null, fullStats = null, fullStatsError = null;
+  const $ = id => document.getElementById(id);
+  function escape(s) { if (s == null) return ""; return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+  function fmtTime(s) { if (s == null || !isFinite(s)) return "-"; const mm = Math.floor(s / 60); const ss = s - mm * 60; return mm + ":" + (ss < 10 ? "0" : "") + ss.toFixed(1); }
+  const TYPE_LABEL = { multi_choice_question: "multiple choice", open_structured: "open answer", true_or_false_question: "true / false" };
+
+  async function loadAll() {
+    const [a, b] = await Promise.all([
+      fetch("data/samples.json").then(r => { if (!r.ok) throw new Error("samples.json HTTP " + r.status); return r.json(); }),
+      fetch("full_dataset_stats.json?v=" + Date.now(), { cache: "no-store" }).then(r => r.ok ? r.json() : null).catch(e => { fullStatsError = String(e); return null; }),
+    ]);
+    SAMPLES = a; fullStats = b;
+  }
+  function field(label, value, isCode) { return '<div class="field"><div class="field-label">' + escape(label) + '</div><div class="field-value' + (isCode ? " code" : "") + '">' + value + "</div></div>"; }
+  function renderCountHistogram(counts, order) {
+    let entries = Object.entries(counts || {});
+    if (order) entries.sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0])); else entries.sort((a, b) => b[1] - a[1]);
+    if (!entries.length) return "<p class='note'>No data.</p>";
+    const maxV = Math.max.apply(null, entries.map(e => e[1])); const total = entries.reduce((s, e) => s + e[1], 0);
+    let html = '<div class="histogram">';
+    entries.forEach(([k, v]) => {
+      html += '<div class="hist-row"><div class="hist-label" style="text-align:left;color:var(--text);">' + escape(k) + '</div>' +
+        '<div class="hist-bar-wrap"><div class="hist-bar" style="width:' + (v / maxV * 100).toFixed(2) + '%"></div></div>' +
+        '<div class="hist-count">' + v + '<span class="hist-pct">(' + (v / total * 100).toFixed(1) + '%)</span></div></div>';
+    });
+    return html + '</div>';
+  }
+  function setVideo(container, src) {
+    container.innerHTML = "";
+    const v = document.createElement("video"); v.src = src; v.controls = true; v.preload = "metadata"; v.id = "main-video";
+    v.addEventListener("error", () => { const ph = document.createElement("div"); ph.className = "video-missing"; ph.innerHTML = '<div><b>Video not included in this subset</b></div><div style="font-family:monospace;font-size:11px;margin-top:6px;">' + escape(src) + '</div>'; v.replaceWith(ph); });
+    container.appendChild(v);
+  }
+
+  function renderOverview() {
+    if (!fullStats) { $("overview-panel").innerHTML = '<h2>Dataset Overview</h2><p class="note">full_dataset_stats.json failed to load' + (fullStatsError ? ' (' + escape(fullStatsError) + ')' : '') + '.</p>'; return; }
+    const o = fullStats;
+    let html = '<h2>Dataset Overview <span style="color:var(--muted);font-weight:400;font-size:12px;">(full benchmark, computed from annotations.jsonl)</span></h2>';
+    html += '<div class="stats-summary"><span>videos<b>' + o.n_videos + '</b></span><span>dialogue turns<b>' + o.n_turns + '</b></span><span>turns with dependencies<b>' + o.n_dependent + '</b></span>' +
+      '<span>episodic-dependency turns<b>' + o.n_episodic + '</b></span><span>answer-dependency turns<b>' + o.n_answer + '</b></span><span>multi-parent turns<b>' + o.n_multi_parent + '</b></span>' +
+      '<span>turns per video<b>' + o.turns_per_video.min + '–' + o.turns_per_video.max + ' (median ' + o.turns_per_video.median + ')</b></span></div>';
+    html += '<p class="task-desc">In-context video memory: one video, one multi-turn dialogue. An <b>episodic</b> dependency revisits a scene, object or event discussed in an earlier turn (what the model has seen); an <b>answer</b> dependency builds on the model\'s own earlier answer (what it has said). Turns are asked in order with the model\'s previous responses kept in the history (sequential self-rollout). Metrics: TurnAcc over all turns, EpiDepAcc over turns with an episodic parent, AnsDepAcc over turns with an answer parent counting a turn only if its whole answer-ancestor chain is also correct, Overall = their mean.</p>';
+    $("overview-panel").innerHTML = html;
+  }
+
+  function renderStats() {
+    const panel = $("stats-panel");
+    if (!fullStats) { panel.innerHTML = ""; return; }
+    let html = '<h2>Turn Types <span style="color:var(--muted);font-weight:400;font-size:12px;">(full benchmark)</span></h2>' + renderCountHistogram(fullStats.turn_types);
+    html += '<h2>Dependency Kinds per Turn <span style="color:var(--muted);font-weight:400;font-size:12px;">(full benchmark; a turn can carry both kinds)</span></h2>' + renderCountHistogram(fullStats.dependency_kinds, ["none", "episodic", "answer", "episodic+answer"]);
+    html += '<h2>Turns per Video <span style="color:var(--muted);font-weight:400;font-size:12px;">(full benchmark)</span></h2>' + renderCountHistogram(fullStats.turns_per_video_hist, Object.keys(fullStats.turns_per_video_hist));
+    html += '<h2>Number of Parents per Dependent Turn</h2>' + renderCountHistogram(fullStats.parents_hist, Object.keys(fullStats.parents_hist));
+    html += '<h2>Leaderboard (128 frames, sequential self-rollout; from the official README, Nov 2026)</h2>';
+    html += '<div class="table-wrap" style="overflow:auto;"><table style="border-collapse:collapse;font-size:12px;"><thead><tr><th style="text-align:left;padding:4px 10px;color:var(--muted);">Model</th><th style="padding:4px 10px;color:var(--muted);">TurnAcc</th><th style="padding:4px 10px;color:var(--muted);">EpiDepAcc</th><th style="padding:4px 10px;color:var(--muted);">AnsDepAcc</th><th style="padding:4px 10px;color:var(--muted);">Overall</th></tr></thead><tbody>';
+    (fullStats.leaderboard || []).forEach(r => { html += '<tr><td style="padding:3px 10px;">' + escape(r[0]) + '</td>' + r.slice(1).map(v => '<td style="padding:3px 10px;text-align:right;font-family:monospace;">' + v + '</td>').join("") + '</tr>'; });
+    html += '</tbody></table></div>';
+    panel.innerHTML = html;
+  }
+
+  function renderSample(s) {
+    const d = s.dialogue;
+    const nd = d.filter(t => t.dependency).length;
+    const meta = [];
+    meta.push(field("Video ID", escape(s.video_id), true));
+    meta.push(field("Video file", escape(s.video_name), true));
+    if (s.duration_s) meta.push(field("Duration", fmtTime(s.duration_s) + ' <span class="related-span">(' + s.duration_s.toFixed(1) + 's)</span>'));
+    meta.push(field("# turns", String(d.length)));
+    meta.push(field("# turns with dependencies", nd + " (episodic " + d.filter(t => t.dependency && Object.values(t.dependency.dep_type).includes("episodic")).length + ", answer " + d.filter(t => t.dependency && Object.values(t.dependency.dep_type).includes("answer")).length + ")"));
+    meta.push(field("Turn types", escape(Object.entries(d.reduce((m, t) => { m[TYPE_LABEL[t.type] || t.type] = (m[TYPE_LABEL[t.type] || t.type] || 0) + 1; return m; }, {})).map(e => e[0] + " ×" + e[1]).join(", "))));
+    meta.push(field("Note", "Videos here are re-encoded to 480p for the viewer; the model input is 128 fixed frames, never the video file."));
+    $("metadata-fields").innerHTML = meta.join("");
+    setVideo($("video-container"), "videos/" + s.video_name);
+
+    const showAns = $("show-answers").checked;
+    let html = '<div class="lead"><span>yellow left border = episodic dependency</span><span>purple = answer dependency</span><span>green = both</span><span>click a badge to highlight the parent turn</span></div>';
+    html += '<h2>Dialogue (' + d.length + ' turns, in evaluation order)</h2>';
+    d.forEach((t, i) => {
+      const dep = t.dependency; let cls = "turn";
+      if (dep) { const kinds = new Set(Object.values(dep.dep_type)); cls += kinds.size > 1 ? " dep-both" : (kinds.has("episodic") ? " dep-episodic" : " dep-answer"); }
+      html += '<div class="' + cls + '" id="turn-' + escape(t.turn_id) + '"><div class="chat-meta"><span>' + escape(t.turn_id) + ' &middot; ' + escape(TYPE_LABEL[t.type] || t.type) + '</span><span>' +
+        (dep ? Object.entries(dep.dep_type).map(([p, k]) => '<span class="dep-badge ' + escape(k) + '" data-p="' + escape(p) + '">' + escape(k) + ' &larr; ' + escape(p) + '</span>').join("") : '<span style="color:var(--muted);">no dependency</span>') + '</span></div>';
+      html += '<div class="q">' + escape(t.question) + '</div>';
+      if (t.options) html += '<ul class="mcq">' + Object.entries(t.options).map(([k, v]) => '<li class="' + (showAns && k === t.answer ? "correct" : "") + '"><b>' + escape(k) + '.</b> ' + escape(v) + '</li>').join("") + '</ul>';
+      if (showAns) html += '<div class="a"><b>gold:</b> ' + escape(t.answer) + (t.acceptable_answers ? ' <span class="related-span">(also accepted: ' + escape(t.acceptable_answers.join(" | ")) + ')</span>' : '') + '</div>';
+      else html += '<div class="a hidden">gold answer hidden</div>';
+      html += '</div>';
+    });
+    html += '<h2>Raw JSON</h2><details><summary style="cursor:pointer;color:var(--accent);font-size:12px;">Show raw annotations.jsonl entry</summary><pre style="background:#0a0d11;border:1px solid var(--border);border-radius:4px;padding:12px;overflow:auto;font-size:11px;max-height:460px;">' + escape(JSON.stringify(s, null, 2)) + '</pre></details>';
+    $("task-content").innerHTML = html;
+    document.querySelectorAll(".dep-badge").forEach(b => b.addEventListener("click", () => {
+      const el = document.getElementById("turn-" + b.getAttribute("data-p")); if (!el) return;
+      document.querySelectorAll(".turn.flash").forEach(x => x.classList.remove("flash")); el.classList.add("flash"); el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }));
+  }
+
+  function render() {
+    if (state.idx < 0) state.idx = 0; if (state.idx >= SAMPLES.length) state.idx = SAMPLES.length - 1;
+    $("subset-select").value = String(state.idx);
+    $("prev-btn").disabled = state.idx === 0; $("next-btn").disabled = state.idx === SAMPLES.length - 1;
+    renderOverview(); renderSample(SAMPLES[state.idx]); renderStats();
+  }
+
+  async function init() {
+    try { await loadAll(); } catch (err) { $("metadata-fields").innerHTML = '<div class="error-msg"><b>Failed to load data:</b><br>' + escape(err.message) + '</div>'; return; }
+    $("n-subset").textContent = SAMPLES.length;
+    const sel = $("subset-select");
+    SAMPLES.forEach((s, i) => { const opt = document.createElement("option"); opt.value = String(i); opt.textContent = s.video_id + " · " + s.dialogue.length + " turns" + (s.duration_s ? " · " + fmtTime(s.duration_s) : ""); sel.appendChild(opt); });
+    sel.addEventListener("change", () => { state.idx = parseInt(sel.value, 10) || 0; render(); });
+    $("prev-btn").addEventListener("click", () => { if (state.idx > 0) { state.idx--; render(); } });
+    $("next-btn").addEventListener("click", () => { state.idx++; render(); });
+    $("random-btn").addEventListener("click", () => { state.idx = Math.floor(Math.random() * SAMPLES.length); render(); });
+    $("show-answers").addEventListener("change", () => renderSample(SAMPLES[state.idx]));
+    document.addEventListener("keydown", (e) => { if (["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName)) return; if (e.key === "ArrowLeft") $("prev-btn").click(); else if (e.key === "ArrowRight") $("next-btn").click(); else if (e.key === "r" || e.key === "R") $("random-btn").click(); });
+    render();
+  }
+  init();
+})();
+</script>
+</body>
+</html>

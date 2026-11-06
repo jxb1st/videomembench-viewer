@@ -1,0 +1,674 @@
+[
+ {
+  "video_id": "videomembench-118",
+  "video_name": "videomembench-118.mp4",
+  "dialogue": [
+   {
+    "turn_id": "T1",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "What object is on the left of the table?",
+    "options": null,
+    "answer": "A trash can."
+   },
+   {
+    "turn_id": "T2",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "What color is the object from T1?",
+    "options": null,
+    "answer": "Black."
+   },
+   {
+    "turn_id": "T3",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "What small item appears on the white chair's seat cushion mid-video?",
+    "options": null,
+    "answer": "A tan pouch on the cushion"
+   },
+   {
+    "turn_id": "T4",
+    "type": "multi_choice_question",
+    "dependency": {
+     "depends_on": [
+      "T3"
+     ],
+     "dep_type": {
+      "T3": "episodic"
+     }
+    },
+    "question": "Where on the chair is the object from T3?",
+    "options": {
+     "A": "In the upper-left corner of the seat cushion.",
+     "B": "In the center of the seat cushion.",
+     "C": "In the lower-left corner of the seat cushion.",
+     "D": "In the upper-right corner of the seat cushion.",
+     "E": "At the midpoint of the seat cushion\u2019s front edge, away from either corner.",
+     "F": "On the armrest of the chair.",
+     "G": "At the midpoint of the seat cushion\u2019s back edge, against the backrest and away from either corner.",
+     "H": "In the lower-right corner of the seat cushion."
+    },
+    "answer": "H"
+   },
+   {
+    "turn_id": "T5",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T3",
+      "T1"
+     ],
+     "dep_type": {
+      "T3": "episodic",
+      "T1": "episodic"
+     }
+    },
+    "question": "Which has more chairs around it: the table near the object from T3 or the table near the object from T1?",
+    "options": null,
+    "answer": "The table near the object from T1."
+   },
+   {
+    "turn_id": "T6",
+    "type": "multi_choice_question",
+    "dependency": {
+     "depends_on": [
+      "T5"
+     ],
+     "dep_type": {
+      "T5": "answer"
+     }
+    },
+    "question": "How many more chairs are around the table identified in T5 than around the other table?",
+    "options": {
+     "A": "One chair.",
+     "B": "Two chairs.",
+     "C": "Three chairs.",
+     "D": "They have the same number of chairs.",
+     "E": "Four chairs.",
+     "F": "One fewer chair.",
+     "G": "Five chairs.",
+     "H": "Six chairs."
+    },
+    "answer": "A"
+   }
+  ],
+  "duration_s": 28.75
+ },
+ {
+  "video_id": "videomembench-101",
+  "video_name": "videomembench-101.mp4",
+  "dialogue": [
+   {
+    "turn_id": "T1",
+    "type": "multi_choice_question",
+    "dependency": null,
+    "question": "How many red plastic cups are in the stack on the lower shelf?",
+    "options": {
+     "A": "7",
+     "B": "3",
+     "C": "5",
+     "D": "11",
+     "E": "6",
+     "F": "9",
+     "G": "8",
+     "H": "12"
+    },
+    "answer": "F"
+   },
+   {
+    "turn_id": "T2",
+    "type": "true_or_false_question",
+    "dependency": null,
+    "question": "Is there a soap dispenser mounted on the counter by the sink?",
+    "options": null,
+    "answer": "False"
+   },
+   {
+    "turn_id": "T3",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "How many distinct white rings are visible on the stack from T1?",
+    "options": null,
+    "answer": "Between 5 and 10"
+   },
+   {
+    "turn_id": "T4",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "Which statement best describes the state of the stack from T1?",
+    "options": null,
+    "answer": "The stack is clearly visible and contains more than 5 items."
+   },
+   {
+    "turn_id": "T5",
+    "type": "multi_choice_question",
+    "dependency": null,
+    "question": "How are the handles on the appliance's bottom two doors oriented compared to the top two?",
+    "options": {
+     "A": "Neither bottom door has a visible handle.",
+     "B": "They are oriented horizontally on one door and vertically on the other",
+     "C": "Both handles are oriented diagonally.",
+     "D": "They are oriented vertically",
+     "E": "They are oriented horizontally"
+    },
+    "answer": "D"
+   },
+   {
+    "turn_id": "T6",
+    "type": "multi_choice_question",
+    "dependency": {
+     "depends_on": [
+      "T5"
+     ],
+     "dep_type": {
+      "T5": "episodic"
+     }
+    },
+    "question": "How does the camera move from the red cups shelf to the appliance from T5?",
+    "options": {
+     "A": "Pans right, then moves forward",
+     "B": "Moves forward, then pans left",
+     "C": "Pans left, then moves backward",
+     "D": "Tilts down, then pans right",
+     "E": "Pans right, then moves backward",
+     "F": "Pans left, then moves forward",
+     "G": "Moves forward, then tilts up",
+     "H": "Pans left, then stays stationary"
+    },
+    "answer": "F"
+   }
+  ],
+  "duration_s": 55.58
+ },
+ {
+  "video_id": "videomembench-117",
+  "video_name": "videomembench-117.mp4",
+  "dialogue": [
+   {
+    "turn_id": "T1",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "On the bookshelf's middle shelf, what is immediately right of the white iron?",
+    "options": null,
+    "answer": "A white bottle"
+   },
+   {
+    "turn_id": "T2",
+    "type": "multi_choice_question",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "What color is the cap of the container on the shelf directly below the bottle from T1?",
+    "options": {
+     "A": "Red",
+     "B": "Blue",
+     "C": "White",
+     "D": "Green",
+     "E": "Black",
+     "F": "Orange",
+     "G": "Yellow",
+     "H": "Purple"
+    },
+    "answer": "G"
+   },
+   {
+    "turn_id": "T3",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T2"
+     ],
+     "dep_type": {
+      "T2": "episodic"
+     }
+    },
+    "question": "On the bottom shelf of the bookshelf, what object is positioned immediately to the right of the container identified in T2?",
+    "options": null,
+    "answer": "Colorful snack packets / wrappers"
+   },
+   {
+    "turn_id": "T4",
+    "type": "multi_choice_question",
+    "dependency": null,
+    "question": "What color is the towel hanging on the right side of the closet door?",
+    "options": {
+     "A": "White",
+     "B": "Blue",
+     "C": "Grey",
+     "D": "Black",
+     "E": "Beige",
+     "F": "Pink",
+     "G": "Green",
+     "H": "Orange"
+    },
+    "answer": "C"
+   },
+   {
+    "turn_id": "T5",
+    "type": "multi_choice_question",
+    "dependency": null,
+    "question": "What does the shirt of the person walking in the hallway look like?",
+    "options": {
+     "A": "Dark grey with a visible logo",
+     "B": "Dark grey with a hood",
+     "C": "White with a visible logo",
+     "D": "Plain white with no logo",
+     "E": "Light grey with a small chest logo",
+     "F": "Plain black with no logo",
+     "G": "Plain navy with no logo",
+     "H": "Plain light grey with no logo"
+    },
+    "answer": "H"
+   },
+   {
+    "turn_id": "T6",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "Is the wall directly above the white door bare, or does it have white paper with handwritten text pinned on it?",
+    "options": null,
+    "answer": "No, the wall area directly above the door frame is bare."
+   },
+   {
+    "turn_id": "T7",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T1",
+      "T3"
+     ],
+     "dep_type": {
+      "T1": "episodic",
+      "T3": "episodic"
+     }
+    },
+    "question": "How are the item from T1 and the item from T3 vertically aligned on the bookshelf?",
+    "options": null,
+    "answer": "The item in T1 is placed on a higher shelf than the item in T3"
+   },
+   {
+    "turn_id": "T8",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "As the camera pans left to right across the room, in what order does the furniture appear?",
+    "options": null,
+    "answer": "The camera pans from the bookshelf on the left, moves right to the desk under the bunk bed, and continues further right to the closet doors."
+   }
+  ],
+  "duration_s": 97.33
+ },
+ {
+  "video_id": "videomembench-128",
+  "video_name": "videomembench-128.mp4",
+  "dialogue": [
+   {
+    "turn_id": "T1",
+    "type": "multi_choice_question",
+    "dependency": null,
+    "question": "In the opening bowl with the blue geometric rim, how are the scallion pieces oriented relative to the wontons and the rim's handle-like pattern?",
+    "options": {
+     "A": "Scallions lie horizontally across the wontons, parallel to the bowl's handle-like pattern on the right.",
+     "B": "Scallions lie diagonally across the wontons, pointing toward the handle-like pattern on the left.",
+     "C": "Scallions are submerged and not visible above the wontons.",
+     "D": "Scallions are vertical, placed between the wontons.",
+     "E": "Scallions are clustered near the rim, opposite the handle-like pattern.",
+     "F": "Scallions lie horizontally across the wontons, perpendicular to the bowl's handle-like pattern on the right.",
+     "G": "Scallions are piled in the center on top of the wontons, with no clear orientation."
+    },
+    "answer": "A"
+   },
+   {
+    "turn_id": "T2",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "On the counter behind the man, what is the color of the lid on the glass jar standing directly next to the jar with the yellow lid?",
+    "options": null,
+    "answer": "Green"
+   },
+   {
+    "turn_id": "T3",
+    "type": "true_or_false_question",
+    "dependency": {
+     "depends_on": [
+      "T2"
+     ],
+     "dep_type": {
+      "T2": "episodic"
+     }
+    },
+    "question": "While the man lifts noodles with chopsticks, does his right hand touch the jar with the yellow lid from T2?",
+    "options": null,
+    "answer": "False"
+   },
+   {
+    "turn_id": "T4",
+    "type": "multi_choice_question",
+    "dependency": null,
+    "question": "How does the man's tie pattern appear in the wide counter shot versus the close-up eating shot?",
+    "options": {
+     "A": "The tie appears striped in the wide shot and dotted in the close-up.",
+     "B": "The small dot pattern is clearly visible in both shots, with no change in density or contrast.",
+     "C": "The pattern appears denser and more contrasted in the close-up.",
+     "D": "The dots change from blue to white between the two shots.",
+     "E": "The pattern is only visible in the wide shot.",
+     "F": "The pattern is only visible in the close-up shot.",
+     "G": "The tie appears solid in both shots, with no visible pattern."
+    },
+    "answer": "B"
+   },
+   {
+    "turn_id": "T5",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "In the close-up of the spoon holding a wonton, how does its noodle-to-soup content compare to the bowl from T1?",
+    "options": null,
+    "answer": "The spoon holds a higher proportion of noodles and visible shrimp bits than the average seen in the full bowl from T1."
+   },
+   {
+    "turn_id": "T6",
+    "type": "true_or_false_question",
+    "dependency": {
+     "depends_on": [
+      "T3"
+     ],
+     "dep_type": {
+      "T3": "episodic"
+     }
+    },
+    "question": "After the man's bite around 0:50, are the dark chopsticks resting on the saucer rather than held, unlike the noodle lift from T3?",
+    "options": null,
+    "answer": "False"
+   },
+   {
+    "turn_id": "T7",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T4",
+      "T5"
+     ],
+     "dep_type": {
+      "T4": "episodic",
+      "T5": "episodic"
+     }
+    },
+    "question": "Based on the tie/expression from T4 and the wonton spoon close-up from T5, what is the dominant tone of the eating segment?",
+    "options": null,
+    "answer": "A tone of profound sensory appreciation, emphasized by the man\u2019s closed eyes and nodding, combined with the camera\u2019s foc"
+   }
+  ],
+  "duration_s": 118.79
+ },
+ {
+  "video_id": "videomembench-119",
+  "video_name": "videomembench-119.mp4",
+  "dialogue": [
+   {
+    "turn_id": "T1",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "Going straight from the chair nearest the table to the door, what is the last object before the door and on which side of the path is it?",
+    "options": null,
+    "answer": "The small black stand is the last object encountered, and it is on the right side of the path."
+   },
+   {
+    "turn_id": "T2",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "What is the door's opening mechanism and the main material of its frame?",
+    "options": null,
+    "answer": "Lever-style latch; metal frame"
+   },
+   {
+    "turn_id": "T3",
+    "type": "multi_choice_question",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "Using the forward-facing direction of the chair from T1, where is the door?",
+    "options": {
+     "A": "Directly in front of the chair",
+     "B": "Slightly to the right and in front of the chair",
+     "C": "Directly behind the chair",
+     "D": "Slightly to the left and behind the chair",
+     "E": "Slightly to the left and in front of the chair",
+     "F": "Directly to the right of the chair",
+     "G": "Slightly to the right and behind the chair",
+     "H": "Far to the left, level with the chair"
+    },
+    "answer": "B"
+   },
+   {
+    "turn_id": "T4",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "How does the blue cable interact with the black speakerphone and the white power adapter?",
+    "options": null,
+    "answer": "The cable passes under the speakerphone to the adapter."
+   },
+   {
+    "turn_id": "T5",
+    "type": "true_or_false_question",
+    "dependency": null,
+    "question": "Take the right-side chair that is neither closest nor farthest from the camera. Does it have armrests on both sides?",
+    "options": null,
+    "answer": "True"
+   },
+   {
+    "turn_id": "T6",
+    "type": "multi_choice_question",
+    "dependency": {
+     "depends_on": [
+      "T5"
+     ],
+     "dep_type": {
+      "T5": "episodic"
+     }
+    },
+    "question": "Moving from the chair in T5 to the table edge by the shortest straight line, which object do you hit first?",
+    "options": {
+     "A": "A glass",
+     "B": "A conference speaker device",
+     "C": "No object",
+     "D": "A laptop",
+     "E": "A notebook",
+     "F": "A cable",
+     "G": "A power adapter",
+     "H": "A remote control"
+    },
+    "answer": "F"
+   },
+   {
+    "turn_id": "T7",
+    "type": "multi_choice_question",
+    "dependency": null,
+    "question": "Which visible chair is most directly aligned with the gap between the two wall-mounted screens? In the option descriptions, 'behind it' refers to the black chair in the foreground on the right.",
+    "options": {
+     "A": "The black chair slightly behind it near the center.",
+     "B": "The black chair in the foreground on the left.",
+     "C": "The black chair in the foreground on the right.",
+     "D": "The gray-green chair on the far right."
+    },
+    "answer": "A"
+   },
+   {
+    "turn_id": "T8",
+    "type": "multi_choice_question",
+    "dependency": {
+     "depends_on": [
+      "T7"
+     ],
+     "dep_type": {
+      "T7": "answer"
+     }
+    },
+    "question": "Drawing the shortest straight path from the chair in T7 to the nearest table edge, which object on the table does it cross first?",
+    "options": {
+     "A": "The conference speaker device",
+     "B": "The remote control",
+     "C": "The glass",
+     "D": "The blue cable",
+     "E": "The white power adapter",
+     "F": "The laptop",
+     "G": "The notebook",
+     "H": "No object is crossed"
+    },
+    "answer": "B"
+   }
+  ],
+  "duration_s": 125.21
+ },
+ {
+  "video_id": "videomembench-114",
+  "video_name": "videomembench-114.mp4",
+  "dialogue": [
+   {
+    "turn_id": "T1",
+    "type": "open_structured",
+    "dependency": null,
+    "question": "During the stadium lighting transition, which section turns from blue to pink first: outer ring, inner ring, or both at once?",
+    "options": null,
+    "answer": "The outer ring changes to pink first, while the inner ring remains blue."
+   },
+   {
+    "turn_id": "T2",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "In the orchestra behind the synthesizer from T1, which instrument is played by the front-row musician second from the right?",
+    "options": null,
+    "answer": "A violin, held under the chin with the bow angled downward."
+   },
+   {
+    "turn_id": "T3",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "Tracking the performer from T1 to the beach, which white-shirted runner with a Union Jack emblem on the left chest breaks away and runs ahead?",
+    "options": null,
+    "answer": "The runner who briefly looks back at the group while running ahead."
+   },
+   {
+    "turn_id": "T4",
+    "type": "true_or_false_question",
+    "dependency": {
+     "depends_on": [
+      "T3"
+     ],
+     "dep_type": {
+      "T3": "answer"
+     }
+    },
+    "question": "The vintage vehicle near the runner from T3 is red and has exactly two people inside, one on the driver's side.",
+    "options": null,
+    "answer": "False"
+   },
+   {
+    "turn_id": "T5",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T1"
+     ],
+     "dep_type": {
+      "T1": "episodic"
+     }
+    },
+    "question": "On the beach, how many visible buttons are on the placket of the polo shirt worn by the performer from T1?",
+    "options": null,
+    "answer": "Two buttons, top one unfastened"
+   },
+   {
+    "turn_id": "T6",
+    "type": "multi_choice_question",
+    "dependency": {
+     "depends_on": [
+      "T2",
+      "T5"
+     ],
+     "dep_type": {
+      "T2": "episodic",
+      "T5": "episodic"
+     }
+    },
+    "question": "As the conductor from T2 gives the final sweeping gesture, what does the performer from T5 use to press the synthesizer key while distracted?",
+    "options": {
+     "A": "The edge of a white smartphone, held in his hand.",
+     "B": "The rounded end of a blue umbrella handle.",
+     "C": "The tip of his index finger, pressed directly onto the white key.",
+     "D": "The knuckle of his index finger, pressed onto the white key.",
+     "E": "The tip of his thumb, pressed directly onto the white key."
+    },
+    "answer": "C"
+   },
+   {
+    "turn_id": "T7",
+    "type": "open_structured",
+    "dependency": {
+     "depends_on": [
+      "T4",
+      "T6"
+     ],
+     "dep_type": {
+      "T4": "episodic",
+      "T6": "episodic"
+     }
+    },
+    "question": "Where is the blue accessory from T4's scene placed relative to the synthesizer keys during the performance from T6?",
+    "options": null,
+    "answer": "Resting on the left side of the synthesizer, partially covering the keys."
+   }
+  ],
+  "duration_s": 336.92
+ }
+]

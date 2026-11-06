@@ -1,0 +1,131 @@
+{
+ "n_videos": 326,
+ "n_turns": 2476,
+ "n_dependent": 1387,
+ "n_episodic": 935,
+ "n_answer": 512,
+ "n_multi_parent": 348,
+ "turns_per_video": {
+  "min": 4,
+  "max": 21,
+  "median": 8,
+  "mean": 7.6
+ },
+ "turn_types": {
+  "open answer": 1709,
+  "multiple choice": 603,
+  "true / false": 164
+ },
+ "dependency_kinds": {
+  "none": 1089,
+  "episodic": 875,
+  "answer": 452,
+  "episodic+answer": 60
+ },
+ "turns_per_video_hist": {
+  "4-5": 28,
+  "6-7": 117,
+  "8-9": 159,
+  "10-12": 19,
+  "13+": 3
+ },
+ "parents_hist": {
+  "1": 1039,
+  "2": 289,
+  "3": 59
+ },
+ "leaderboard": [
+  [
+   "Claude Opus 5",
+   52.3,
+   49.1,
+   35.7,
+   45.7
+  ],
+  [
+   "Gemini 3.8 Flash",
+   50.4,
+   46.6,
+   30.3,
+   42.4
+  ],
+  [
+   "Kimi K3",
+   50.5,
+   49.0,
+   27.1,
+   42.2
+  ],
+  [
+   "GPT-5.6-sol",
+   50.0,
+   47.8,
+   27.1,
+   41.7
+  ],
+  [
+   "Gemini 3.5 Flash",
+   49.6,
+   45.5,
+   29.7,
+   41.6
+  ],
+  [
+   "GPT-5.5",
+   48.0,
+   46.5,
+   27.0,
+   40.5
+  ],
+  [
+   "Claude Sonnet 5",
+   47.8,
+   45.3,
+   27.3,
+   40.2
+  ],
+  [
+   "Gemini 3.1 Pro Preview",
+   45.7,
+   44.8,
+   27.0,
+   39.1
+  ],
+  [
+   "GPT-5.4",
+   44.4,
+   42.6,
+   21.9,
+   36.3
+  ],
+  [
+   "Qwen3-VL-235B-A22B",
+   43.1,
+   41.6,
+   18.6,
+   34.4
+  ],
+  [
+   "Qwen3-VL-32B",
+   39.3,
+   35.9,
+   17.2,
+   30.8
+  ],
+  [
+   "Qwen3-VL-8B",
+   34.8,
+   32.1,
+   12.3,
+   26.4
+  ],
+  [
+   "Qwen2.5-VL-7B",
+   26.2,
+   24.9,
+   8.4,
+   19.8
+  ]
+ ],
+ "source": "annotations.jsonl of VideoMemBench/data (HF rev e4a76fd4); leaderboard rows from the official README (Nov 2026)"
+}
